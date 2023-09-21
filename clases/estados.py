@@ -2,7 +2,7 @@
 
 class estados:  #clase
     # constructor
-    def __init__(self,clave=0, nombre="", lat=0, lon=0, poblacion=0):
+    def __init__(self,clave=0, nombre="", lat=0, lon=0, poblacion=0,):
         self.clave  = clave
         self.nombre  = nombre
         self.lon = lon

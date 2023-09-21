@@ -2,6 +2,7 @@
 #import clases.estados
 from clases.estados import estados
 import webbrowser
+from clases.municipios import municipio
 
 #creamos el primer estado (sinaloa)
 sinaloa = estados()
@@ -28,3 +29,11 @@ print url
 webbrowser.open(url)
 durango.establecer_ubicacion("24.05718","-104.53320")
 webbrowser.open(durango.obtener_enlace_google_maps())
+
+#lllllllllMunicipio
+culiacan= municipio()
+culiacan.nombre = "CULIACAN"
+culiacan.lat = 0
+culiacan.lon = 0
+culiacan.pert= "SINALOA"
+print culiacan
