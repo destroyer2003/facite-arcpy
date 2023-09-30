@@ -6,7 +6,7 @@
 # Description: 
 # ---------------------------------------------------------------------------
 
-# Import arcpy module
+# Import arcpyejercicios module
 import arcpy
 
 
