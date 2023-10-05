@@ -48,3 +48,24 @@ with data.SearchCursor (interseccion,["POP10","STOPID", "NAME"]) as cursor:
 
 print "informacion del diccionario: "
 print interseccion_datos
+#generara el archivo Csv a partir de la interseccion de datos
+with open('resultado_interseccion1.csv', 'wb') as archivo_csv:
+    csvwriter = csv.writer(archivo_csv, delimiter = ',')
+    csvwriter.writerow(['STOPID','PROMEDIO','Nombre autobus'])
+    #por cada llave en el diccionario interseccion
+    for i in interseccion_datos.keys():
+        #obtener lista de paradas y la poblacion
+        pop10_list = interseccion_datos[i]
+        #calacular el promedio de la lista
+        promedio = sum(pop10_list) / len(pop10_list)
+        #crear lista con los datos para el CSV en la lista
+        #EXTRAER EL NOMBRE DEL STOPID DE LA CAPA BUSSTOPS
+        nombre_parada_autobus =""
+        with arcpy.da.SearchCursor(parada_autobuses,["STOPID", "BUS_SIGNAG"]) as cursor:
+          for fila in cursor:
+            #si la variable i es igual a la columna stop id entonce exraemos bus sinag
+             if fila[0]== i:
+                nombre_parada_autobus = cursor[1]
+                break
+        csvwriter.writerow([i, promedio, nombre_parada_autobus])
+print "Archivo csv generado ☜(ﾟヮﾟ☜)"
