@@ -8,25 +8,28 @@ import csv      #libreria para generar CSV
 arcpy.env.overwriteOutput = True
 
 #archivo de entrada
-parada_autobuses = r"C:\Users\FOTO_06\PycharmProjects\facite-arcpy\RECURSOS\Data\SanFrancisco.gdb\Bus_Stops"
-censo = r"C:\Users\FOTO_06\PycharmProjects\facite-arcpy\RECURSOS\Data\SanFrancisco.gdb\CensusBlocks2010"
-seleccion_paradas = r"C:\Users\FOTO_06\PycharmProjects\facite-arcpyejercicios\RECURSOS\Data\SanFrancisco.gdb\seleccion"
+parada_autobuses = arcpy.GetParameterAsText(0) #r"C:\Users\FOTO_06\PycharmProjects\facite-arcpy\RECURSOS\Data\SanFrancisco.gdb\Bus_Stops"
+censo =  arcpy.GetParameterAsText(1) #r"C:\Users\FOTO_06\PycharmProjects\facite-arcpy\RECURSOS\Data\SanFrancisco.gdb\CensusBlocks2010"
+seleccion_paradas = arcpy.GetParameterAsText(2) #r"C:\Users\FOTO_06\PycharmProjects\facite-arcpyejercicios\RECURSOS\Data\SanFrancisco.gdb\seleccion"
 
 #archivos generados
-interseccion = r"C:\Users\FOTO_06\PycharmProjects\facite-arcpy\RECURSOS\Data\SanFrancisco.gdb\InterseccionesCenso"
-buffer = r"C:\Users\FOTO_06\PycharmProjects\facite-arcpy\RECURSOS\Data\SanFrancisco.gdb\Buffer"
+interseccion = arcpy.GetParameterAsText(4)#r"C:\Users\FOTO_06\PycharmProjects\facite-arcpy\RECURSOS\Data\SanFrancisco.gdb\InterseccionesCenso"
+buffer =  arcpy.GetParameterAsText(3)#r"C:\Users\FOTO_06\PycharmProjects\facite-arcpy\RECURSOS\Data\SanFrancisco.gdb\Buffer"
+resultado_csv = arcpy.GetParameterAsText(5)
 
-'''
 #seleccionar Bus stops que coincidan con el name 14 OB y el bus_signan Lowell st.
-arcpyejercicios.Select_analysis(parada_autobuses, seleccion_paradas,  "NAME = '14 OB' AND BUS_SIGNAG = 'Lowell St.'")
+arcpy.Select_analysis(parada_autobuses, seleccion_paradas,  "NAME = '14 OB' AND BUS_SIGNAG = 'Lowell St.'")
+arcpy.AddMessage("Seleccion Finalizada ")
 print "Seleccion Finalizada (●'◡'●)"
 #HACER BUFFER DE 100 MTRS
-arcpyejercicios.Buffer_analysis(seleccion_paradas, buffer,  "100 Meters")
+arcpy.Buffer_analysis(seleccion_paradas, buffer,  "100 Meters")
+arcpy.AddMessage("Buffer Finalizado ^_^")
 print "Buffer Finalizado ^_^"
 # hacer interseccion de census block con el buffer
-arcpyejercicios.Intersect_analysis([censo, buffer], interseccion )
-print "Interseccion Finalizada ಥ_ಥ"
-'''
+arcpy.Intersect_analysis([censo, buffer], interseccion )
+arcpy.AddMessage("Interseccion Finalizada :-)")
+print "Interseccion Finalizada "
+
 #diccionario para extraer informacion
 interseccion_datos= { }
 
@@ -49,7 +52,7 @@ with data.SearchCursor (interseccion,["POP10","STOPID", "NAME"]) as cursor:
 print "informacion del diccionario: "
 print interseccion_datos
 #generara el archivo Csv a partir de la interseccion de datos
-with open('resultado_interseccion1.csv', 'wb') as archivo_csv:
+with open(resultado_csv, 'wb') as archivo_csv:
     csvwriter = csv.writer(archivo_csv, delimiter = ',')
     csvwriter.writerow(['STOPID','PROMEDIO','Nombre autobus'])
     #por cada llave en el diccionario interseccion
@@ -69,3 +72,4 @@ with open('resultado_interseccion1.csv', 'wb') as archivo_csv:
                 break
         csvwriter.writerow([i, promedio, nombre_parada_autobus])
 print "Archivo csv generado ☜(ﾟヮﾟ☜)"
+arcpy.AddMessage("Archivo csv generado 1 ☜(ﾟヮﾟ☜)")
